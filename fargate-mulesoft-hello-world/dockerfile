@@ -1,0 +1,5 @@
+FROM javastreets/mule:ce421
+
+COPY ./target/fargate-mulesoft-hello-world*.jar /opt/mule/apps/
+
+CMD [ "/opt/mule/bin/mule"]
