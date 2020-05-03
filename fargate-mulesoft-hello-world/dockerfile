@@ -2,4 +2,4 @@ FROM javastreets/mule:ce421
 
 COPY ./target/fargate-mulesoft-hello-world*.jar /opt/mule/apps/
 
-CMD [ "/opt/mule/bin/mule"]
+CMD [ "/opt/mule/bin/mule", "-M-Dmule.testingMode", "-M-Dmule.debug.enable=true"] 

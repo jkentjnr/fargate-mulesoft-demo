@@ -1,0 +1,52 @@
+[
+    {
+      "name": "${container_name}",
+      "image": "${image}",
+      "portMappings": [
+        {
+          "containerPort": ${container_port},
+          "hostPort": ${container_port}
+        }
+      ],
+      "cpu": ${desired_task_cpu},
+      "memory": ${desired_task_memory},
+      "networkMode": "awsvpc",
+      "essential": true,
+      "mountPoints": [
+        {
+          "sourceVolume": "logs",
+          "containerPath": "/opt/mule/logs"
+        },
+        {
+          "sourceVolume": "conf",
+          "containerPath": "/opt/mule/conf"
+        },
+        {
+          "sourceVolume": "apps",
+          "containerPath": "/opt/mule/apps"
+        },
+        {
+          "sourceVolume": "domains",
+          "containerPath": "/opt/mule/domains"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${log_group}",
+          "awslogs-region": "${aws_region}",
+          "awslogs-stream-prefix": "${container_name}"
+        }
+      },
+      "environment": [
+        {
+          "name": "FOO",
+          "value": "BAR"
+        },
+        {
+          "name" : "PORT",
+          "value": "${container_port}"
+        }
+      ]
+    }
+  ]

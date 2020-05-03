@@ -17,6 +17,18 @@ resource "aws_iam_role" "codebuild" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "role_attach_codebuild_ecr_read" {
+  role = aws_iam_role.codebuild.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "role_attach_codepipeline_ecs_full" {
+  role = aws_iam_role.codepipeline.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceFullAccess"
+}
+
+
+
 resource "aws_iam_role" "codepipeline" {
   name = "${local.workspace-name}-pipeline"
 
@@ -53,6 +65,20 @@ resource "aws_iam_policy" "devops" {
 {
   "Version": "2012-10-17",
   "Statement": [
+    {
+        "Effect": "Allow",
+        "Action": "iam:PassRole",
+        "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Resource": [
+        "${module.ecs.repository_arn}"
+      ],
+      "Action": [
+        "ecr:*"
+      ]
+    },
     {
       "Effect": "Allow",
       "Resource": [
